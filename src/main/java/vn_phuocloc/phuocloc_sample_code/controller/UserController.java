@@ -2,14 +2,22 @@ package vn_phuocloc.phuocloc_sample_code.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import vn_phuocloc.phuocloc_sample_code.DTO.UserRequestDTO;
+import vn_phuocloc.phuocloc_sample_code.DTO.response.ResponseSuccess;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,43 +31,50 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class UserController {
 
     @PostMapping(value = "/")
-    public String addUser(@Valid @RequestBody UserRequestDTO userRequest) {
+    public ResponseSuccess addUser(@Valid @RequestBody UserRequestDTO userRequest) {
 
-        return "User added";
+        return new ResponseSuccess(HttpStatus.CREATED, "User added successfully", 1);
     }
 
     @PutMapping("/{userId}")
-    public String updateUser(@PathVariable int userId, @Valid @RequestBody UserRequestDTO userRequestDTO) {
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ResponseSuccess updateUser(@PathVariable int userId, @Valid @RequestBody UserRequestDTO userRequestDTO) {
 
         System.out.println("Request update userId = " + userId);
-        return "user updated";
+        return new ResponseSuccess(HttpStatus.ACCEPTED, "User updated successfully!!");
     }
 
     @PatchMapping("/{userId}")
-    public String changeStatus(@PathVariable int userId, @RequestParam(required = false) boolean status) {
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ResponseSuccess changeStatus(@PathVariable int userId, @RequestParam(required = false) boolean status) {
         System.out.println("Request change user status. userId = " + userId);
-        return "User status changed";
+        return new ResponseSuccess(HttpStatus.ACCEPTED, "User Status changed successfully!!!");
     }
 
     @DeleteMapping("/{userId}")
-    public String deleteUser(@Min(1) @PathVariable int userId) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseSuccess deleteUser(@Min(1) @PathVariable int userId) {
 
-        return "User deleted";
+        return new ResponseSuccess(HttpStatus.NO_CONTENT, "Deleted user successfully!!!");
     }
 
     @GetMapping("/{userId}")
-    public UserRequestDTO getUser(@PathVariable int userId) {
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseSuccess getUser(@PathVariable int userId) {
         System.out.println("Request get user by user id");
-        return new UserRequestDTO("nguyen", "phuoc", "0338361709", "npl2004qn@gmail.com");
+        return new ResponseSuccess(HttpStatus.OK, "Get user success",
+                new UserRequestDTO("nguyen", "phuoc", "0338361709", "npl2004qn@gmail.com"));
     }
 
     @GetMapping("/list")
-    public List<UserRequestDTO> getAllUsers(
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseSuccess getAllUsers(
             @RequestParam(required = false) String email,
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize) {
-        return List.of(new UserRequestDTO("nguyen", "phuoc", "0338361709", "npl2004qn@gmail.com"),
-                new UserRequestDTO("nguyen", "phuoc", "0338361709", "npl2004qn@gmail.com"));
+        return new ResponseSuccess(HttpStatus.OK, "Get list of user success",
+                List.of(new UserRequestDTO("nguyen", "phuoc", "0338361709", "npl2004qn@gmail.com"),
+                        new UserRequestDTO("nguyen", "phuoc", "0338361709", "npl2004qn@gmail.com")));
     }
 
 }
