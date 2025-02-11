@@ -1,11 +1,17 @@
 package vn_phuocloc.phuocloc_sample_code.DTO.response;
 
+import org.springframework.http.HttpStatus;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 public class ResponseData<T> {
 
     private int status;
     private String message;
+    @JsonInclude(JsonInclude.Include.NON_NULL) // neu data ma null thi khong hien thi
     private T data;
 
+    // Get Post
     public ResponseData(int status, String message, T data) {
         this.status = status;
         this.message = message;

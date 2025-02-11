@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import vn_phuocloc.phuocloc_sample_code.DTO.UserRequestDTO;
+import vn_phuocloc.phuocloc_sample_code.DTO.response.ResponseData;
 import vn_phuocloc.phuocloc_sample_code.DTO.response.ResponseSuccess;
 
 import java.util.List;
@@ -31,48 +32,43 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class UserController {
 
     @PostMapping(value = "/")
-    public ResponseSuccess addUser(@Valid @RequestBody UserRequestDTO userRequest) {
+    public ResponseData<Integer> addUser(@Valid @RequestBody UserRequestDTO userRequest) {
 
-        return new ResponseSuccess(HttpStatus.CREATED, "User added successfully", 1);
+        return new ResponseData<>(HttpStatus.CREATED.value(), "User added successfully", 1);
     }
 
     @PutMapping("/{userId}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseSuccess updateUser(@PathVariable int userId, @Valid @RequestBody UserRequestDTO userRequestDTO) {
+    public ResponseData<?> updateUser(@PathVariable int userId, @Valid @RequestBody UserRequestDTO userRequestDTO) {
 
         System.out.println("Request update userId = " + userId);
-        return new ResponseSuccess(HttpStatus.ACCEPTED, "User updated successfully!!");
+        return new ResponseData<>(HttpStatus.ACCEPTED.value(), "User updated successfully!!");
     }
 
     @PatchMapping("/{userId}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseSuccess changeStatus(@PathVariable int userId, @RequestParam(required = false) boolean status) {
+    public ResponseData<?> changeStatus(@PathVariable int userId, @RequestParam(required = false) boolean status) {
         System.out.println("Request change user status. userId = " + userId);
-        return new ResponseSuccess(HttpStatus.ACCEPTED, "User Status changed successfully!!!");
+        return new ResponseData<>(HttpStatus.ACCEPTED.value(), "User Status changed successfully!!!");
     }
 
     @DeleteMapping("/{userId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseSuccess deleteUser(@Min(1) @PathVariable int userId) {
+    public ResponseData<?> deleteUser(@Min(1) @PathVariable int userId) {
 
-        return new ResponseSuccess(HttpStatus.NO_CONTENT, "Deleted user successfully!!!");
+        return new ResponseData<>(HttpStatus.NO_CONTENT.value(), "Deleted user successfully!!!");
     }
 
     @GetMapping("/{userId}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseSuccess getUser(@PathVariable int userId) {
+    public ResponseData<UserRequestDTO> getUser(@PathVariable int userId) {
         System.out.println("Request get user by user id");
-        return new ResponseSuccess(HttpStatus.OK, "Get user success",
+        return new ResponseData<>(HttpStatus.OK.value(), "Get user success",
                 new UserRequestDTO("nguyen", "phuoc", "0338361709", "npl2004qn@gmail.com"));
     }
 
     @GetMapping("/list")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseSuccess getAllUsers(
+    public ResponseData<List<UserRequestDTO>> getAllUsers(
             @RequestParam(required = false) String email,
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize) {
-        return new ResponseSuccess(HttpStatus.OK, "Get list of user success",
+        return new ResponseData<>(HttpStatus.OK.value(), "Get list of user success",
                 List.of(new UserRequestDTO("nguyen", "phuoc", "0338361709", "npl2004qn@gmail.com"),
                         new UserRequestDTO("nguyen", "phuoc", "0338361709", "npl2004qn@gmail.com")));
     }
