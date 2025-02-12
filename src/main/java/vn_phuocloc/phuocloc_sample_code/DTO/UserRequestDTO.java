@@ -46,14 +46,12 @@ public class UserRequestDTO implements Serializable {
     @EnumPattern(name = "status", regexp = "ACTIVE|INACTIVE|NONE")
     private UserStatus status;
 
-    @GenderSubset(anyOf = {Gender.MALE, Gender.FEMALE, Gender.OTHER})
+    @GenderSubset(anyOf = { Gender.MALE, Gender.FEMALE, Gender.OTHER })
     private Gender gender;
 
     @NotNull
     @EnumValue(name = "type", enumClass = UserType.class)
     private String type;
-
-
 
     public UserRequestDTO() {
 
@@ -137,10 +135,5 @@ public class UserRequestDTO implements Serializable {
     public void setType(String type) {
         this.type = type;
     }
-
-    
-
-    
-    
 
 }
