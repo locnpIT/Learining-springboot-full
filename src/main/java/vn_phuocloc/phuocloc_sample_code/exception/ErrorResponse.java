@@ -9,8 +9,8 @@ public class ErrorResponse {
     private Date timestamp;
     private int status;
     private String path;
-    private List<String> error = new ArrayList<>();
-    private String message;
+    private String error;
+    private List<String> message = new ArrayList<>();
 
     public ErrorResponse() {
 
@@ -40,24 +40,24 @@ public class ErrorResponse {
         this.path = path;
     }
 
-    public List<String> getError() {
-        return this.error;
+    public String getError() {
+        return error;
     }
 
-    public void setError(List<String> error) {
+    public void setError(String error) {
         this.error = error;
     }
 
-    public String getMessage() {
-        return message;
+    public List<String> getMessage() {
+        return this.message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(List<String> message) {
         this.message = message;
     }
 
-    public void addError(String message) {
-        this.error.add(message);
+    public void addMessage(String message) {
+        this.message.add(message);
     }
 
 }

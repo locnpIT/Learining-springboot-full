@@ -41,20 +41,21 @@ public class GlobalExceptionHandler {
             int start = message.lastIndexOf("[");
             int end = message.lastIndexOf("]");
             message = message.substring(start + 1, end - 1);
-            // errorResponse.setError("Payload invalid");
+            errorResponse.setError("Payload invalid");
+
             List<FieldError> fieldErrors = ((MethodArgumentNotValidException) e).getBindingResult().getFieldErrors();
+
             for (FieldError fieldError : fieldErrors) {
-                errorResponse.addError(fieldError.getDefaultMessage());
+                errorResponse.addMessage(fieldError.getDefaultMessage());
             }
-            errorResponse.setMessage(message);
+            // errorResponse.setMessage(message);
 
         }
         // HandlerMethodValidationException dùng để xử lí các tham số phương thức như
         // @Min @Max,...
         else if (e instanceof HandlerMethodValidationException) {
             message = message.substring(message.indexOf(" ") + 1);
-            // errorResponse.setError("Pathvariable invalid");
-            errorResponse.addError("Pathvariable invalid");
+            errorResponse.setError("Pathvariable invalid");
         }
         LOGGER.error(e.getMessage(), e);
         return errorResponse;
@@ -68,12 +69,11 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setTimestamp(new Date());
         errorResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        errorResponse.addError(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
-        // errorResponse.setError(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
-
+        errorResponse.setError(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
         errorResponse.setPath(request.getDescription(false).replace("uri=", ""));
         if (e instanceof MethodArgumentTypeMismatchException) {
-            errorResponse.setMessage("Failed to convert value of type");
+            // errorResponse.setMessage("Failed to convert value of type");
+            errorResponse.addMessage("Failed to convert value of type");
         }
         // errorResponse.setMessage("");
 
