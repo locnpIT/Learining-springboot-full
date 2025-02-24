@@ -11,11 +11,17 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import jakarta.validation.ConstraintViolationException;
 
 import java.util.Date;
+import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    // Ghi log
+    private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler({ MethodArgumentNotValidException.class,
             ConstraintViolationException.class,
@@ -35,7 +41,11 @@ public class GlobalExceptionHandler {
             int start = message.lastIndexOf("[");
             int end = message.lastIndexOf("]");
             message = message.substring(start + 1, end - 1);
-            errorResponse.setError("Payload invalid");
+            // errorResponse.setError("Payload invalid");
+            List<FieldError> fieldErrors = ((MethodArgumentNotValidException) e).getBindingResult().getFieldErrors();
+            for (FieldError fieldError : fieldErrors) {
+                errorResponse.addError(fieldError.getDefaultMessage());
+            }
             errorResponse.setMessage(message);
 
         }
@@ -43,9 +53,10 @@ public class GlobalExceptionHandler {
         // @Min @Max,...
         else if (e instanceof HandlerMethodValidationException) {
             message = message.substring(message.indexOf(" ") + 1);
-            errorResponse.setError("Pathvariable invalid");
+            // errorResponse.setError("Pathvariable invalid");
+            errorResponse.addError("Pathvariable invalid");
         }
-
+        LOGGER.error(e.getMessage(), e);
         return errorResponse;
     }
 
@@ -57,13 +68,16 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setTimestamp(new Date());
         errorResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        errorResponse.setError(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+        errorResponse.addError(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+        // errorResponse.setError(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+
         errorResponse.setPath(request.getDescription(false).replace("uri=", ""));
         if (e instanceof MethodArgumentTypeMismatchException) {
             errorResponse.setMessage("Failed to convert value of type");
         }
         // errorResponse.setMessage("");
 
+        LOGGER.error(e.getMessage(), e);
         return errorResponse;
     }
 

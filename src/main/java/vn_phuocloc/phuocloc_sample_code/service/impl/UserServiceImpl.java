@@ -11,11 +11,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int addUser(UserRequestDTO requestDTO) {
-        System.out.println("Save user to db");
-        if(!requestDTO.getFirstName().equals("Loc")){
-            // ném lỗi này ra để bên UserController bắt
-            throw new ResourceNotFoundException("Loc khong ton tai");
-        }
+        // System.out.println("Save user to db");
+        // if (!requestDTO.getFirstName().equals("Loc")) {
+        //     // ném lỗi này ra để bên UserController bắt
+        //     throw new ResourceNotFoundException("Loc khong ton tai");
+        // }
         return 0;
     }
 

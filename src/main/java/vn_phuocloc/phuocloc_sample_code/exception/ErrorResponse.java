@@ -1,13 +1,15 @@
 package vn_phuocloc.phuocloc_sample_code.exception;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ErrorResponse {
 
     private Date timestamp;
     private int status;
     private String path;
-    private String error;
+    private List<String> error = new ArrayList<>();
     private String message;
 
     public ErrorResponse() {
@@ -38,11 +40,11 @@ public class ErrorResponse {
         this.path = path;
     }
 
-    public String getError() {
-        return error;
+    public List<String> getError() {
+        return this.error;
     }
 
-    public void setError(String error) {
+    public void setError(List<String> error) {
         this.error = error;
     }
 
@@ -52,6 +54,10 @@ public class ErrorResponse {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public void addError(String message) {
+        this.error.add(message);
     }
 
 }
