@@ -17,7 +17,8 @@ import org.springframework.http.HttpStatus;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({ MethodArgumentNotValidException.class, ConstraintViolationException.class,
+    @ExceptionHandler({ MethodArgumentNotValidException.class,
+            ConstraintViolationException.class,
             HandlerMethodValidationException.class })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(Exception e, WebRequest request) {
@@ -50,7 +51,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({ MethodArgumentTypeMismatchException.class })
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleInternalServerErrorException(Exception e, WebRequest request) {
+    public ErrorResponse handleInternalServerErrorException(Exception e,
+            WebRequest request) {
         System.out.println("======> handleInternalServerErrorException");
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setTimestamp(new Date());
