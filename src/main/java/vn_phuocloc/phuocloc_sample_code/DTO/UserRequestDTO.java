@@ -2,17 +2,26 @@ package vn_phuocloc.phuocloc_sample_code.DTO;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.List;
+import java.util.Set;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import vn_phuocloc.phuocloc_sample_code.model.Address;
 import vn_phuocloc.phuocloc_sample_code.util.EnumPattern;
 import vn_phuocloc.phuocloc_sample_code.util.EnumValue;
 import vn_phuocloc.phuocloc_sample_code.util.Gender;
@@ -52,6 +61,41 @@ public class UserRequestDTO implements Serializable {
     @NotNull
     @EnumValue(name = "type", enumClass = UserType.class)
     private String type;
+
+
+    private String username;
+
+
+    private String password;
+
+
+    private Set<Address> addresses = new HashSet<>();
+
+
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(Set<Address> addresses) {
+        this.addresses = addresses;
+    }
 
     public UserRequestDTO() {
 
